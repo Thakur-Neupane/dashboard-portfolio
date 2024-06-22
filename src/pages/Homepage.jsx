@@ -5,14 +5,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@radix-ui/react-tooltip";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 import {
   FolderGit,
@@ -21,17 +14,24 @@ import {
   LayoutGrid,
   LogOut,
   MessageSquareMore,
-  Package,
   User,
   PencilRuler,
   PanelLeft,
   Package2,
+  Package,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Button } from "@/components/ui/button";
+import Account from "./sub-Components/Account";
+import Dashboard from "./sub-Components/Dashboard";
+import AddProject from "./sub-Components/AddProject";
+import AddSkill from "./sub-Components/AddSkill";
+import AddApplication from "./sub-Components/AddApplication";
+import AddTimeline from "./sub-Components/AddTimeline";
+import Messages from "./sub-Components/Messages";
 
 const HomePage = () => {
   const [active, setActive] = useState("");
@@ -47,17 +47,17 @@ const HomePage = () => {
       toast.error(error);
       dispatch(clearAllUserErrors());
     }
-    if (!isAuthenticated) {
-      navigateTo("/login");
-    }
+    // if (!isAuthenticated) {
+    //   navigateTo("/login");
+    // }
   }, [isAuthenticated]);
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <aside className="fixed inset-y-0 left-0 hidden w-14 flex-col border-r bg-background sm:flex z-50">
         <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
-          <Link className="group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base">
-            <Package2 className="h-4 w-4 transition-all group-hover:scale-110" />
-            <span className="sr-only">Acme Inc</span>
+          <Link className="group flex h-p w-p shrink-0 items-center gap-2 rounded-full">
+            <Package className="h-6 w-6 transition-all group-hover:scale-110" />
+            <span className="sr-only">Dashboard</span>
           </Link>
           <TooltipProvider>
             <Tooltip>
@@ -121,17 +121,17 @@ const HomePage = () => {
               <TooltipTrigger asChild>
                 <Link
                   className={`flex h-9 w-9 items-center justify-center rounded-lg ${
-                    active === "Add Uses"
+                    active === "Add Application"
                       ? "text-accent-foreground bg-accent"
                       : "text-muted-foreground"
                   }  transition-colors hover:text-foreground md:h-8 md:w-8`}
-                  onClick={() => setActive("Add Uses")}
+                  onClick={() => setActive("Add Application")}
                 >
                   <LayoutGrid className="h-5 w-5" />
-                  <span className="sr-only">Add Uses</span>
+                  <span className="sr-only">Add Application</span>
                 </Link>
               </TooltipTrigger>
-              <TooltipContent side="right">Add Uses</TooltipContent>
+              <TooltipContent side="right">Add Application</TooltipContent>
             </Tooltip>
           </TooltipProvider>
           <TooltipProvider>
@@ -170,6 +170,7 @@ const HomePage = () => {
               <TooltipContent side="right">Messages</TooltipContent>
             </Tooltip>
           </TooltipProvider>
+
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -220,7 +221,6 @@ const HomePage = () => {
                 className={`group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base`}
               >
                 <Package2 className="h-5 w-5 transition-all group-hover:scale-110" />
-                <span className="sr-only">Acme Inc</span>
               </Link>
               <Link
                 href="#"
@@ -258,18 +258,18 @@ const HomePage = () => {
               </Link>
               <Link
                 className={`flex items-center gap-4 px-2.5 ${
-                  active === "Add Uses"
+                  active === "Add Application"
                     ? "text-foreground"
                     : "text-muted-foreground hover:text-foreground "
                 }`}
-                onClick={() => setActive("Add Uses")}
+                onClick={() => setActive("Add Application")}
               >
                 <LayoutGrid className="h-5 w-5" />
-                Add Uses
+                Add Application
               </Link>
               <Link
                 className={`flex items-center gap-4 px-2.5 ${
-                  active === "Profile"
+                  active === "Account"
                     ? "text-foreground"
                     : "text-muted-foreground hover:text-foreground "
                 }`}
@@ -280,14 +280,14 @@ const HomePage = () => {
               </Link>
               <Link
                 className={`flex items-center gap-4 px-2.5 ${
-                  active === "Timeline"
+                  active === "Add Timeline"
                     ? "text-foreground"
                     : "text-muted-foreground hover:text-foreground "
                 }`}
-                onClick={() => setActive("Timeline")}
+                onClick={() => setActive("Add Timeline")}
               >
                 <History className="h-5 w-5" />
-                Timeline
+                Add Timeline
               </Link>
               <Link
                 className={`flex items-center gap-4 px-2.5 ${
@@ -324,6 +324,34 @@ const HomePage = () => {
           </h1>
         </div>
       </header>
+      {(() => {
+        switch (active) {
+          case "Dashboard":
+            return <Dashboard />;
+            break;
+          case "Add Project":
+            return <AddProject />;
+            break;
+          case "Add Skill":
+            return <AddSkill />;
+            break;
+          case "Add Application":
+            return <AddApplication />;
+            break;
+          case "Add Timeline":
+            return <AddTimeline />;
+            break;
+          case "Messages":
+            return <Messages />;
+            break;
+          case "Account":
+            return <Account />;
+            break;
+          default:
+            return <Dashboard />;
+            break;
+        }
+      })()}
     </div>
   );
 };
