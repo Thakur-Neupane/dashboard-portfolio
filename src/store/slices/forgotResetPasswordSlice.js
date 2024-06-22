@@ -50,14 +50,14 @@ export const forgotPassword = (email) => async (dispatch) => {
   dispatch(forgotResetPassSlice.actions.forgotPasswordRequest());
   try {
     const { data } = await axios.post(
-      "http://localhost:4000/api/v1/user/password/forgot",
+      " http://localhost:4000/api/v1/user/password/forgot",
       { email },
       { withCredentials: true, headers: { "Content-Type": "application/json" } }
     );
+
     dispatch(forgotResetPassSlice.actions.forgotPasswordSuccess(data.message));
     dispatch(forgotResetPassSlice.actions.clearAllErrors());
   } catch (error) {
-    console.log(error);
     dispatch(
       forgotResetPassSlice.actions.forgotPasswordFailed(
         error.response.data.message
@@ -71,7 +71,7 @@ export const resetPassword =
     dispatch(forgotResetPassSlice.actions.resetPasswordRequest());
     try {
       const { data } = await axios.put(
-        ` http://localhost:4000/api/v1/user/password/reset/token${token}`,
+        ` http://localhost:4000/api/v1/user/password/reset/${token}`,
         { password, confirmPassword },
         {
           withCredentials: true,
@@ -82,7 +82,6 @@ export const resetPassword =
       dispatch(forgotResetPassSlice.actions.resetPasswordSuccess(data.message));
       dispatch(forgotResetPassSlice.actions.clearAllErrors());
     } catch (error) {
-      console.log(error);
       dispatch(
         forgotResetPassSlice.actions.resetPasswordFailed(
           error.response.data.message
@@ -91,7 +90,7 @@ export const resetPassword =
     }
   };
 
-export const clearAllForgotPasswordErrors = () => (dispatch) => {
+export const clearAllForgotResetPassErrors = () => (dispatch) => {
   dispatch(forgotResetPassSlice.actions.clearAllErrors());
 };
 

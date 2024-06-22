@@ -87,6 +87,7 @@ const userSlice = createSlice({
       state.isUpdated = false;
       state.message = null;
     },
+
     clearAllErrors(state, action) {
       state.error = null;
       state = state.user;
@@ -111,6 +112,7 @@ export const login = (email, password) => async (dispatch) => {
 
 export const getUser = () => async (dispatch) => {
   dispatch(userSlice.actions.loadUserRequest());
+
   try {
     const { data } = await axios.get("http://localhost:4000/api/v1/user/me", {
       withCredentials: true,

@@ -1,15 +1,16 @@
+import { Link, useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+
 import {
-  clearAllForgotPasswordErrors,
+  clearAllForgotResetPassErrors,
   forgotPassword,
 } from "@/store/slices/forgotResetPasswordSlice";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import SpecialLoadingButton from "./sub-Components/SpecialLoadingButton";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -20,14 +21,14 @@ const ForgotPassword = () => {
   const dispatch = useDispatch();
   const navigateTo = useNavigate();
 
-  const handleForgotPassword = (email) => {
+  const handleForgotPassword = () => {
     dispatch(forgotPassword(email));
   };
 
   useEffect(() => {
     if (error) {
       toast.error(error);
-      dispatch(clearAllForgotPasswordErrors());
+      dispatch(clearAllForgotResetPassErrors());
     }
     if (isAuthenticated) {
       navigateTo("/");
@@ -53,7 +54,7 @@ const ForgotPassword = () => {
               <Input
                 id="email"
                 type="email"
-                placeholder="m@example.com"
+                placeholder="thakur.neupane.neupane@gmail.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -69,15 +70,16 @@ const ForgotPassword = () => {
                 </Link>
               </div>
             </div>
-            {!loading ? (
+            {loading ? (
+              <SpecialLoadingButton content={"Requesting"} />
+            ) : (
               <Button
-                onClick={() => handleForgotPassword(email)}
+                type="submit"
                 className="w-full"
+                onClick={handleForgotPassword}
               >
                 Forgot Password
               </Button>
-            ) : (
-              <SpecialLoadingButton content={"Requesting"} />
             )}
           </div>
         </div>
