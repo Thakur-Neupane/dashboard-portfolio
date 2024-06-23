@@ -30,6 +30,19 @@ const userSlice = createSlice({
       state.user = {};
       state.error = action.payload;
     },
+    logoutSuccess(state, action) {
+      state.loading = false;
+      state.isAuthenticated = false;
+      state.user = {};
+      state.error = null;
+      state.message = action.payload;
+    },
+    logoutFailed(state, action) {
+      state.loading = false;
+      state.isAuthenticated = state.isAuthenticated;
+      state.user = state.user;
+      state.error = action.payload;
+    },
     loadUserRequest(state, action) {
       state.loading = true;
       state.isAuthenticated = false;
@@ -48,21 +61,6 @@ const userSlice = createSlice({
       state.user = {};
       state.error = action.payload;
     },
-
-    logoutSuccess(state, action) {
-      state.loading = false;
-      state.isAuthenticated = false;
-      state.user = {};
-      state.error = null;
-      state.message = action.payload;
-    },
-    logoutFailed(state, action) {
-      state.loading = false;
-      state.isAuthenticated = state.isAuthenticated;
-      state.user = state.user;
-      state.error = action.payload;
-    },
-
     updatePasswordRequest(state, action) {
       state.loading = true;
       state.isUpdated = false;
@@ -81,13 +79,29 @@ const userSlice = createSlice({
       state.message = null;
       state.error = action.payload;
     },
-
+    updateProfileRequest(state, action) {
+      state.loading = true;
+      state.isUpdated = false;
+      state.message = null;
+      state.error = null;
+    },
+    updateProfileSuccess(state, action) {
+      state.loading = false;
+      state.isUpdated = true;
+      state.message = action.payload;
+      state.error = null;
+    },
+    updateProfileFailed(state, action) {
+      state.loading = false;
+      state.isUpdated = false;
+      state.message = null;
+      state.error = action.payload;
+    },
     updateProfileResetAfterUpdate(state, action) {
       state.error = null;
       state.isUpdated = false;
       state.message = null;
     },
-
     clearAllErrors(state, action) {
       state.error = null;
       state = state.user;
@@ -158,18 +172,18 @@ export const updatePassword =
     }
   };
 
-export const updateProfile = (data) => async (dispatch) => {
+export const updateProfile = (newData) => async (dispatch) => {
   dispatch(userSlice.actions.updateProfileRequest());
   try {
-    const response = await axios.put(
-      "http://localhost:400/api/v1/user/update/me",
-      data,
+    const { data } = await axios.put(
+      "http://localhost:4000/api/v1/user/update/me",
+      newData,
       {
         withCredentials: true,
         headers: { "Content-Type": "multipart/form-data" },
       }
     );
-    dispatch(userSlice.actions.updateProfileSuccess(response.data.message));
+    dispatch(userSlice.actions.updateProfileSuccess(data.message));
     dispatch(userSlice.actions.clearAllErrors());
   } catch (error) {
     dispatch(
